@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, User
 
 
-class DefaultUser(User):
+class DefaultUser(AbstractUser):
     phone = models.CharField(max_length=30, null=False, verbose_name="Phone")
     family_name = models.CharField(max_length=50, blank=True, null=True, verbose_name="Family name")
 
