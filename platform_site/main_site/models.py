@@ -5,11 +5,11 @@ from django.utils.translation import gettext_lazy as _
 
 
 class DefaultUser(AbstractUser):
-    group_choise = (
+    GROUP_CHOICE = (
         ("S", "Student"),
         ("C", "Company")
     )
-    group = models.CharField(max_length=1, blank=False, null=False, verbose_name="Group", choices=group_choise)
+    group = models.CharField(max_length=1, blank=False, null=False, verbose_name="Group", choices=GROUP_CHOICE)
     phone = models.CharField(max_length=30, blank=False, null=False, verbose_name="Phone")
     family_name = models.CharField(max_length=50, blank=True, null=True, verbose_name="Family name")
     REQUIRED_FIELDS = ["phone", "username", "group"]
@@ -52,7 +52,10 @@ class Tags(models.Model):
     )
 
     type_of_skills = models.CharField(max_length=30, choices=SKILL_TYPES, null=False, verbose_name="Skill type")
-    name_tag = models.CharField(max_length=100, null=False, verbose_name="Tag")
+    name_tag = models.CharField(max_length=100, null=False, verbose_name="Tag", unique=True)
+
+    def __str__(self):
+        return self.name_tag
 
 
 class Company(models.Model):
@@ -73,8 +76,8 @@ class Student(models.Model):
 
     first_name = models.CharField(max_length=100, null=False, verbose_name="First name")
     last_name = models.CharField(max_length=100, null=False, verbose_name="Last name")
-    family_name = models.CharField(max_length=100, blank=True ,null=True, verbose_name="Family name")
-    user = models.ForeignKey(DefaultUser, on_delete=models.CASCADE, verbose_name="User")
+    family_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="Family name")
+    user = models.OneToOneField(DefaultUser, on_delete=models.CASCADE,  related_name="email_user", verbose_name="Email")
     birthday = models.DateField(null=False, verbose_name="Birthday")
     cv = models.ForeignKey(CV, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="CV")
     city_of_living = models.CharField(max_length=100, null=False, verbose_name="City")
@@ -82,6 +85,7 @@ class Student(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER, null=False, verbose_name="Gender")
     tags = models.ManyToManyField(Tags, related_name="tag", verbose_name="Tags")
     is_searching = models.BooleanField(null=False, verbose_name="Searching status")
+    motivation_letter = models.TextField(null=False, verbose_name="Motivations letter")
 
 
 class Rate(models.Model):
