@@ -12,9 +12,10 @@ class DefaultUser(AbstractUser):
     group = models.CharField(max_length=1, blank=False, null=False, verbose_name="Group", choices=GROUP_CHOICE)
     phone = models.CharField(max_length=30, blank=False, null=False, verbose_name="Phone")
     family_name = models.CharField(max_length=50, blank=True, null=True, verbose_name="Family name")
-    REQUIRED_FIELDS = ["phone", "username", "group"]
+    REQUIRED_FIELDS = ["phone", "username", "group", "is_staff"]
     email = models.EmailField(_('email'), unique=True)
     USERNAME_FIELD = 'email'
+
 
 
 class Links(models.Model):
@@ -86,6 +87,7 @@ class Student(models.Model):
     tags = models.ManyToManyField(Tags, related_name="tag", verbose_name="Tags")
     is_searching = models.BooleanField(null=False, verbose_name="Searching status")
     motivation_letter = models.TextField(null=False, verbose_name="Motivations letter")
+    mean_rate = models.FloatField(default=0, verbose_name="Mean rate")
 
 
 class Rate(models.Model):
@@ -156,7 +158,7 @@ class StudentBid(models.Model):
     )
 
     project = models.OneToOneField(StudentProjects, on_delete=models.CASCADE, verbose_name="Student project")
-    company = models.ForeignKey(Company, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="Company")
+    company = models.OneToOneField(Company, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="Company")
     students = models.ManyToManyField(Student, blank=True, null=True, verbose_name="Students")
     status = models.CharField(max_length=1, choices=STATUS_TYPES, default="C", verbose_name="Checking status")
     date_start = models.DateField(auto_now_add=True)

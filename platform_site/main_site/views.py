@@ -13,6 +13,36 @@ from .permissions import *
 from rest_framework import mixins
 
 
+class DetailCVAPIView(generics.RetrieveAPIView):
+    queryset = CV.objects.all()
+    serializer_class = CVSerializer
+    # permission_classes = [IsAuthenticated]
+
+
+class ListCVAPIView(generics.ListAPIView):
+    queryset = CV.objects.all()
+    serializer_class = CVSerializer
+    # permission_classes = [IsAuthenticated]
+
+
+class DeleteCVAPIView(generics.RetrieveDestroyAPIView):
+    queryset = CV.objects.all()
+    serializer_class = CVSerializer
+    # permission_classes = [IsAuthenticated]
+
+
+class UpdateCVAPIView(generics.RetrieveUpdateAPIView):
+    queryset = CV.objects.all()
+    serializer_class = CVSerializer
+    # permission_classes = [IsAuthenticated]
+
+
+class CreateCVAPIView(generics.CreateAPIView):
+    queryset = CV.objects.all()
+    serializer_class = CVSerializer
+    permission_classes = [IsAuthenticated]
+
+
 class DeleteCompanyAPIView(generics.RetrieveDestroyAPIView):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
@@ -71,8 +101,7 @@ class AllStudentsAPIView(generics.ListAPIView):
 class AdminStudentsAPIView(generics.ListAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentsSerializer
-    #permission_classes = [IsAuthenticated]
-
+    # permission_classes = [IsAuthenticated]
 
 
 class GetStudentsByRateAPIView(generics.ListAPIView):
@@ -80,7 +109,9 @@ class GetStudentsByRateAPIView(generics.ListAPIView):
     serializer_class = RateSerializer
     filter_backends = [filters.OrderingFilter]
     ordering_fields = ["work_speed", "communication", "tech_part"]
-   # permission_classes = [IsAuthenticated]
+
+
+# permission_classes = [IsAuthenticated]
 
 
 class GetMeanScore(APIView):
@@ -102,8 +133,8 @@ class GetMeanScore(APIView):
 
 
 class GetStudentsByTagAPIViews(generics.ListAPIView):
-    serializer_class = StudentsSerializer
-    permission_classes = [IsAuthenticated]
+    serializer_class = SortedStudentsSerializer
+    # permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         required_name_tags = self.request.query_params.getlist('tags[]')
@@ -121,7 +152,7 @@ class GetStudentsByTagAPIViews(generics.ListAPIView):
                 queryset |= Student.objects.filter(tags=tag)
 
             if len(queryset):
-                return queryset
+                return queryset.order_by("-mean_rate")
 
         return Student.objects.none()
 
@@ -157,3 +188,25 @@ class CreateProjectCompany(generics.CreateAPIView):
     queryset = CompanyProjects.objects.all()
     serializer_class = CompanyProjectsSerializer
     permission_classes = [IsAuthenticated]
+
+
+class CreateCompanyBid(generics.CreateAPIView):
+    queryset = CompanyBid.objects.all()
+    serializer_class = CompanyBidSerializer
+    # permission_classes = [IsAuthenticated]
+
+
+class UpdateCompanyBid(generics.UpdateAPIView):
+    queryset = CompanyBid.objects.all()
+    serializer_class = CompanyBidUpdateSerializer
+    # permission_classes = [IsAuthenticated]
+
+class CreateStudentBid(generics.CreateAPIView):
+    queryset = StudentBid.objects.all()
+    serializer_class = StudentBidSerializer
+    # permission_classes = [IsAuthenticated]
+
+class UpdateStudentBid(generics.UpdateAPIView):
+    queryset = StudentBid.objects.all()
+    serializer_class = StudentBidSerializer
+    # permission_classes = [IsAuthenticated]
