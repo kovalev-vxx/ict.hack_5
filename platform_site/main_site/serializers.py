@@ -94,6 +94,7 @@ class StudentsSerializer(serializers.ModelSerializer):
     tags = TagsSerializer(many=True, read_only=True)
     user = DefaultUserSerializer(many=False, read_only=True)
     gender = serializers.CharField(source='get_gender_display')
+    cv = CVSerializer(read_only=True)
 
     class Meta:
         model = Student

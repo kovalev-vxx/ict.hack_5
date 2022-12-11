@@ -80,7 +80,7 @@ class Student(models.Model):
     family_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="Family name")
     user = models.OneToOneField(DefaultUser, on_delete=models.CASCADE,  related_name="email_user", verbose_name="Email")
     birthday = models.DateField(null=False, verbose_name="Birthday")
-    cv = models.ForeignKey(CV, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="CV")
+    cv = models.OneToOneField(CV, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="CV")
     city_of_living = models.CharField(max_length=100, null=False, verbose_name="City")
     isu_number = models.CharField(max_length=100, null=False, verbose_name="ISU")
     gender = models.CharField(max_length=1, choices=GENDER, null=False, verbose_name="Gender")
