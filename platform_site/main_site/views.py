@@ -71,15 +71,15 @@ class AllStudentsAPIView(generics.ListAPIView):
 class AdminStudentsAPIView(generics.ListAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentsSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated]
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ["work_speed", "communication", "tech_part"]
 
 
 class GetStudentsByRateAPIView(generics.ListAPIView):
     queryset = Rate.objects.all()
     serializer_class = RateSerializer
     permission_classes = [IsAuthenticated]
-    filter_backends = [filters.OrderingFilter]
-    ordering_fields = ["work_speed", "communication", "tech_part"]
 
 
 class GetMeanScore(APIView):
